@@ -8,6 +8,14 @@ module ExpensesHelper
     safe_join([f(expense.amount), currency], ' ')
   end
 
+  def expense_details_col(table)
+    table.col('', class: 'right') do |e|
+      link_to(e, title: 'Details') do
+        tag.i(class: 'icon-document') + ' Details'
+      end
+    end
+  end
+
   def expense_duplicate_col(table)
     table.action_col do |e|
       link_to(new_employee_expense_path(e.employee, template: e), title: 'Kopieren') do
@@ -45,6 +53,18 @@ module ExpensesHelper
           method: :delete
         }
       )
+    end
+  end
+
+  def expense_review_col(table)
+    table.action_col do |e|
+      if e.pending? || e.deferred?
+
+        link_to(expense_review_path(e), title: 'Kontrollieren') do
+          tag.i(class: 'icon-edit') + ' Kontrollieren'
+        end
+
+      end
     end
   end
 
